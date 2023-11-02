@@ -1,11 +1,9 @@
 import { useState } from "react";
 
 
-// import 'bootstrap/dist/css/bootstrap.css';
-// import 'bootstrap/dist/js/bootstrap.js';
-// import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "./App.css";
 
+import Errores from "./Errores";
 import Header from "./Header";
 import Resultados from "./Resultados";
 import CONFIG from "./config/config";
@@ -14,7 +12,6 @@ import { mock1 } from "./constants/mock";
 function App() {
   const [latitud, setLatitud] = useState(CONFIG.default_lat);
   const [longitud, setLongitud] = useState(CONFIG.default_lon);
-  const [query, setQuery] = useState("");
   const [items, setItems] = useState(null);
   const [error, setError] = useState(null);
 
@@ -27,12 +24,15 @@ function App() {
       try {
         let queryParams;
         queryParams = "?appid=" + CONFIG.api_key + "&lat=" + latitud + "&lon=" + longitud;
+        debugger;
         const response = await fetch(`${CONFIG.server_url}${queryParams}`);
         if (response.status === 200) {
           const data = await response.json();
           setItems(data);
-        } else  {
-          setError({ error: { description: response.status } });
+        } else {
+          console.log(response);
+          setError({ estado: response.status, description: response.statusText });
+          console.log(error);
         }
       } catch (error) {
         console.log(error);
@@ -66,7 +66,7 @@ function App() {
           <button type="button" id="buscar" onClick={() => callServer()} className="btn btn-primary">Buscar</button>
         </div>
       </div>
-      {error && <div id="error">Error</div>}
+      {error && <Errores estado={error.estado} description={error.description} />}
       {items && <Resultados numitems={CONFIG.num_items} items={items} />}
     </div>
   );

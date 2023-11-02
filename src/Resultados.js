@@ -1,3 +1,4 @@
+import Tarjeta from "./Tarjeta";
 export default function Resultados(props) {
 
     return <div id="resultados">
@@ -10,18 +11,17 @@ export default function Resultados(props) {
         </div>
 
         <div >
-            <ul id="tiempo">
+            <div className="row row-cols-4 justify-content-center mt-2" >
                 {props.items.daily.map((item, index) => {
                     if (index < props.numitems) {
-                        return <li key={index}>
-                            <p>{
-                                new Date(item.dt * 1000).toLocaleDateString()
-                            }</p>
-                            <img className="tiempoimg" src={process.env.PUBLIC_URL +"/" +item.weather[0].icon+"@2x.png"}  />
-                        </li>
+                        return (
+                            <div className="col-2 border ms-5 rounded pt-2" key={index}>
+                                <Tarjeta dt={item.dt} icono={item.weather[0].icon} temp={item.temp.day} humidity={item.humidity} wind_speed={item.wind_speed} />
+                            </div>
+                        );
                     }
                 })}
-            </ul>
+            </div>
         </div>
     </div>
 } 
