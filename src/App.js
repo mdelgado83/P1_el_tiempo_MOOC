@@ -29,13 +29,16 @@ function App() {
         if (response.status === 200) {
           const data = await response.json();
           setItems(data);
+          setError(null);
         } else {
           console.log(response);
           setError({ estado: response.status, description: response.statusText });
+          setItems(null);
           console.log(error);
         }
       } catch (error) {
         console.log(error);
+        setItems(null);
         setError({ error: { description: error.message } });
       }
     } else {
